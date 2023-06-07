@@ -15,22 +15,13 @@ function getSelectedFilters() {
   return selectedFilters;
 }
 
-function filterRecipes() {
+function filterRecipes(recette) {
   const ingredientCheckboxes = document.querySelectorAll('input[type=checkbox].ingredient');
-  const selectedIngredientFilters = Array.from(ingredientCheckboxes)
-    .filter(checkbox => checkbox.checked)
-    .map(checkbox => checkbox.value.toLowerCase());
-
   const ustensilCheckboxes = document.querySelectorAll('input[type=checkbox].ustensil');
-  const selectedUstensilFilters = Array.from(ustensilCheckboxes)
-    .filter(checkbox => checkbox.checked)
-    .map(checkbox => checkbox.value.toLowerCase());
-
-  const filteredRecipes = filterRecipesBySelectedFilters(recipes, selectedIngredientFilters, selectedUstensilFilters);
 
   ingredientCheckboxes.forEach(checkbox => {
     const value = checkbox.value.toLowerCase();
-    const isFilterPresent = filteredRecipes.some(recipe => {
+    const isFilterPresent = recette.some(recipe => {
       const ingredients = recipe.ingredients.map(ingredient => ingredient.ingredient.toLowerCase());
       return ingredients.includes(value);
     });
@@ -40,7 +31,7 @@ function filterRecipes() {
 
   ustensilCheckboxes.forEach(checkbox => {
     const value = checkbox.value.toLowerCase();
-    const isFilterPresent = filteredRecipes.some(recipe => {
+    const isFilterPresent = recette.some(recipe => {
       const ustensils = recipe.ustensils.map(ustensil => ustensil.toLowerCase());
       return ustensils.includes(value);
     });
@@ -48,8 +39,6 @@ function filterRecipes() {
     checkbox.parentNode.style.display = isFilterPresent ? 'block' : 'none';
   });
 }
-
-
 
 function filterRecipesBySelectedFilters(recipes, selectedFilters) {
   if (selectedFilters.length === 0) {
@@ -72,79 +61,7 @@ function filterRecipesBySelectedFilters(recipes, selectedFilters) {
   return filteredRecipes;
 }
 
-function searchRecipes(query, recipes) {
-  const selectedFilters = getSelectedFilters();
-  const filteredRecipes = filterRecipesBySelectedFilters(recipes, selectedFilters);
-  let isMatchingRecipe = true;
-  // créer un tableau vide pour stocker les résultats de recherche
-  const results = [];
-
-  // parcourir chaque recette
-  for (let i = 0; i < filteredRecipes.length; i++) {
-    const recipe = filteredRecipes[i];
-
-    // vérifier si le nom de la recette correspond à la recherche
-    if (recipe.name.toLowerCase().includes(query)) {
-      results.push(recipe);
-      isMatchingRecipe = false;
-    }
-
-    if (isMatchingRecipe) {
-      // vérifier si l'un des ingrédients de la recette correspond à la recherche
-      for (let j = 0; j < recipe.ingredients.length; j++) {
-        const ingredient = recipe.ingredients[j];
-        if (ingredient.ingredient.toLowerCase().includes(query)) {
-          results.push(recipe);
-          isMatchingRecipe = false;
-        }
-      }
-    }
-
-    if (isMatchingRecipe) {
-      // vérifier si l'un des ustensiles de la recette correspond à la recherche
-      for (let k = 0; k < recipe.ustensils.length; k++) {
-        const utensil = recipe.ustensils[k];
-        if (utensil.toLowerCase().includes(query)) {
-          results.push(recipe);
-          isMatchingRecipe = false;
-        }
-      }
-    }
-  }
-
-  // trier les résultats en fonction du score de pertinence
-  results.sort((a, b) => b.relevance - a.relevance);
-  // retourner les résultats de la recherche
-  filterRecipes();
-  return results;
-}
-
 let searchInput = document.querySelector(".search__input");
-
-searchInput.addEventListener("keyup", function (event) {
-  let keyword = searchInput.value.toLowerCase();
-
-  if (keyword.length >= 3) {
-    const foundRecipes = searchRecipes(keyword, recipes);
-    displayData(foundRecipes);
-    return foundRecipes;
-  }
-  else if (keyword.length === 0) {
-    displayData(recipes);
-    return recipes;
-  }
-});
-
-const filterBtn = document.querySelector('.search__button');
-filterBtn.addEventListener('click', function () {
-  const foundRecipes = searchRecipes(searchInput.value.toLowerCase(), recipes);
-
-  displayData(foundRecipes);
-  return foundRecipes;
-});
-
-
-//Deuxième algo
 
 function createKeywordIndex(recipes) {
   const keywordIndex = {};
@@ -216,7 +133,9 @@ searchButton.addEventListener("click", () => {
   const keywordIndex = createKeywordIndex(recipes);
   console.log(keywordIndex);
   let matchingRecipeIds = null;
-  
+  if (!searchQuery) {
+    displayData(recipes);
+  }
   // Parcourir chaque mot-clé de recherche
   for (const keyword of searchKeywords) {
     if (keyword.length > 3) {
@@ -240,7 +159,8 @@ searchButton.addEventListener("click", () => {
 
   if (matchingRecipeIds && matchingRecipeIds.size > 0) {
     const matchingRecipes = recipes.filter(recipe => matchingRecipeIds.has(recipe.id));
-    console.log(matchingRecipes);
+    filterRecipes(matchingRecipes)
+    displayData(matchingRecipes);
   } else {
     console.log("Aucune recette ne correspond aux mots-clés de recherche.");
   }
