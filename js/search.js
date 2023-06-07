@@ -4,7 +4,6 @@ import displayData from '../js/script.js';
 
 
 function getSelectedFilters() {
-  console.log(document.querySelectorAll('input[type=checkbox]'));
   const selectedFilters = [];
   const checkboxes = document.querySelectorAll('input[type=checkbox]:checked');
   checkboxes.forEach((checkbox) => {
@@ -131,9 +130,11 @@ searchButton.addEventListener("click", () => {
   const searchQueryClear = removeAccentsAndApostrophes(searchQuery);
   const searchKeywords = searchQueryClear.split(" ");
   const keywordIndex = createKeywordIndex(recipes);
-  console.log(keywordIndex);
+  const selectedFilters = getSelectedFilters();
+  const filteredRecipes = filterRecipesBySelectedFilters(recipes, selectedFilters);
+
   let matchingRecipeIds = null;
-  if (!searchQuery) {
+  if (!searchQuery && selectedFilters.length === 0) {
     displayData(recipes);
   }
   // Parcourir chaque mot-clé de recherche
@@ -158,10 +159,14 @@ searchButton.addEventListener("click", () => {
   }
 
   if (matchingRecipeIds && matchingRecipeIds.size > 0) {
-    const matchingRecipes = recipes.filter(recipe => matchingRecipeIds.has(recipe.id));
-    filterRecipes(matchingRecipes)
+    const matchingRecipes = filteredRecipes.filter(recipe => matchingRecipeIds.has(recipe.id));
+    filterRecipes(matchingRecipes);
     displayData(matchingRecipes);
-  } else {
+  } else if(!searchQuery) {
+    filterRecipes(filteredRecipes);
+    displayData(filteredRecipes);
+  }
+  else {
     console.log("Aucune recette ne correspond aux mots-clés de recherche.");
   }
 });
