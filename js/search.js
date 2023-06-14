@@ -124,12 +124,12 @@ function extractKeywords(recipe) {
 }
 
 let searchButton = document.querySelector(".search__button");
+let keywordIndex = createKeywordIndex(recipes);
 
 searchButton.addEventListener("click", () => {
   const searchQuery = searchInput.value.toLowerCase();
   const searchQueryClear = removeAccentsAndApostrophes(searchQuery);
   const searchKeywords = searchQueryClear.split(" ");
-  const keywordIndex = createKeywordIndex(recipes);
   const selectedFilters = getSelectedFilters();
   const filteredRecipes = filterRecipesBySelectedFilters(recipes, selectedFilters);
 
