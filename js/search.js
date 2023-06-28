@@ -17,6 +17,7 @@ function getSelectedFilters() {
 function filterRecipes(recette) {
   const ingredientCheckboxes = document.querySelectorAll('input[type=checkbox].ingredient');
   const ustensilCheckboxes = document.querySelectorAll('input[type=checkbox].ustensil');
+  const applienceCheckboxes = document.querySelectorAll('input[type=checkbox].appliance');
 
   ingredientCheckboxes.forEach(checkbox => {
     const value = checkbox.value.toLowerCase();
@@ -26,6 +27,17 @@ function filterRecipes(recette) {
     });
 
     checkbox.parentNode.style.display = isFilterPresent ? 'block' : 'none';
+  });
+
+  applienceCheckboxes.forEach(checkbox => {
+    const value = checkbox.value.toLowerCase();
+    const isFilterPresent = recette.some(recipe => {
+      const appliance = recipe.appliance.toLowerCase();
+      return appliance === value;
+    });
+
+    checkbox.parentNode.style.display = isFilterPresent ? 'block' : 'none';
+
   });
 
   ustensilCheckboxes.forEach(checkbox => {
@@ -80,7 +92,7 @@ function createKeywordIndex(recipes) {
       // Vérifier si le mot-clé existe déjà dans l'index
       if (keywordIndex.hasOwnProperty(keyword)) {
         const recipeIds = keywordIndex[keyword];
-        
+
         // Vérifier si la recette est déjà attribuée à ce mot-clé
         if (!recipeIds.has(recipeId)) {
           recipeIds.add(recipeId);
@@ -116,10 +128,10 @@ function extractKeywords(recipe) {
 
   // Transformer la chaîne de caractères en tableau de mots sans espaces, points, parenthèses, accents et apostrophes
   const cleanKeywords = keywords.join(' ').split(/\s+/).map(word => word.replace(/[().]+$/, ''));
-  
+
   // Supprimer les mots de moins de 3 caractères
   const filteredKeywords = cleanKeywords.filter(word => word.length > 3);
-  
+
   return filteredKeywords;
 }
 
@@ -160,14 +172,29 @@ searchButton.addEventListener("click", () => {
 
   if (matchingRecipeIds && matchingRecipeIds.size > 0) {
     const matchingRecipes = filteredRecipes.filter(recipe => matchingRecipeIds.has(recipe.id));
-    filterRecipes(matchingRecipes);
-    displayData(matchingRecipes);
-  } else if(!searchQuery) {
+    if (matchingRecipes.length > 0) {
+      filterRecipes(matchingRecipes);
+      displayData(matchingRecipes);
+    } else {
+      clearRecipesCards();
+      displayNoMatchingRecipesMessage();
+    }
+  } else if (!searchQuery) {
     filterRecipes(filteredRecipes);
     displayData(filteredRecipes);
+  } else {
+    clearRecipesCards();
+    displayNoMatchingRecipesMessage();
   }
-  else {
-    console.log("Aucune recette ne correspond aux mots-clés de recherche.");
+
+  function clearRecipesCards() {
+    const recipesCardsDiv = document.querySelector('#recipes__cards');
+    recipesCardsDiv.innerHTML = '';
+  }
+
+  function displayNoMatchingRecipesMessage() {
+    const recipesCardsDiv = document.querySelector('#recipes__cards');
+    recipesCardsDiv.innerHTML = 'Aucune recette ne correspond à votre critère... Vous pouvez chercher "tarte aux pommes", "poisson", etc.';
   }
 });
 
