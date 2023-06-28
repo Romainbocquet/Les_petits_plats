@@ -16,6 +16,7 @@ function getSelectedFilters() {
 
 function filterRecipes(foundRecipes) {
   const ingredientCheckboxes = document.querySelectorAll('input[type=checkbox].ingredient');
+  const applienceCheckboxes = document.querySelectorAll('input[type=checkbox].appliance');
   const ustensilCheckboxes = document.querySelectorAll('input[type=checkbox].ustensil');
 
   ingredientCheckboxes.forEach(checkbox => {
@@ -26,6 +27,17 @@ function filterRecipes(foundRecipes) {
     });
 
     checkbox.parentNode.style.display = isFilterPresent ? 'block' : 'none';
+  });
+
+  applienceCheckboxes.forEach(checkbox => {
+    const value = checkbox.value.toLowerCase();
+    const isFilterPresent = foundRecipes.some(recipe => {
+      const appliance = recipe.appliance.toLowerCase();
+      return appliance === value;
+    });
+
+    checkbox.parentNode.style.display = isFilterPresent ? 'block' : 'none';
+
   });
 
   ustensilCheckboxes.forEach(checkbox => {
@@ -116,9 +128,14 @@ searchInput.addEventListener("keyup", function (event) {
 
   if (keyword.length >= 3) {
     const foundRecipes = searchRecipes(keyword, recipes);
-    displayData(foundRecipes);
-    filterRecipes(foundRecipes);
-    return foundRecipes;
+    if (foundRecipes.length === 0) {
+      clearRecipesCards();
+      displayNoMatchingRecipesMessage();
+    } else {
+      displayData(foundRecipes);
+      filterRecipes(foundRecipes);
+      return foundRecipes;
+    }
   }
   else if (keyword.length === 0) {
     displayData(recipes);
@@ -129,7 +146,16 @@ searchInput.addEventListener("keyup", function (event) {
 const filterBtn = document.querySelector('.search__button');
 filterBtn.addEventListener('click', function () {
   const foundRecipes = searchRecipes(searchInput.value.toLowerCase(), recipes);
-
   displayData(foundRecipes);
   return foundRecipes;
 });
+
+function clearRecipesCards() {
+  const recipesCardsDiv = document.querySelector('#recipes__cards');
+  recipesCardsDiv.innerHTML = '';
+}
+
+function displayNoMatchingRecipesMessage() {
+  const recipesCardsDiv = document.querySelector('#recipes__cards');
+  recipesCardsDiv.innerHTML = 'Aucune recette ne correspond à votre critère... Vous pouvez chercher "tarte aux pommes", "poisson", etc.';
+}
