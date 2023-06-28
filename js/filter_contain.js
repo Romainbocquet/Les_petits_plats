@@ -59,6 +59,7 @@ export function getApplianceLabel(recipe) {
   $applianceInput.type = 'checkbox';
   $applianceInput.name = 'appliance';
   $applianceInput.value = recipe.appliance;
+  $applianceInput.className = 'appliance';
 
   $applianceLabel.appendChild($applianceInput);
   $applianceLabel.appendChild($applianceText);

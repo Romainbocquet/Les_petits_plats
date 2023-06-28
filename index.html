@@ -1,30 +1,29 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="/node_modules/normalize.css/normalize.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   <title>Les Petits Plats</title>
 </head>
+
 <body>
 
   <header class="header d-flex">
-    <img
-      src="/assets/image/logo.svg" class="header__logo" alt="Logo : Les petits plats"
-    />
+    <img src="/assets/image/logo.svg" class="header__logo" alt="Logo : Les petits plats" />
   </header>
 
   <main class="main">
     <section class="search d-flex">
       <div class="search__input-group">
-        <input
-          type="text"
-          class="search__input"
-          placeholder="Rechercher un ingrédient, un appareil, un ustensile, une recette..."
-        />
+        <input type="text" class="search__input"
+          placeholder="Rechercher un ingrédient, un appareil, un ustensile, une recette..." />
         <button class="search__button">
           <img src="/assets/image/loupe.svg" alt="Search" />
         </button>
@@ -32,45 +31,48 @@
     </section>
 
     <div class="tag-selected d-flex"></div>
-<div class="filters d-flex">
-    <div class="filter">
-      <div class="filter-header ingredient">
-        <input type="text" id="ingredient-search" placeholder="Ingrédients">
-        <i class="fas fa-angle-down chev-ingredient"></i>
-      </div>
-      <div class="filter-content-ingredient">
-        <div id="ingredient-grid">
+    <div class="filters d-flex">
+      <div class="filter">
+        <div class="filter-header ingredient">
+          <input type="text" id="ingredient-search" placeholder="Ingrédients">
+          <i class="fas fa-angle-down chev-ingredient"></i>
+        </div>
+        <div class="filter-content-ingredient">
+          <div id="ingredient-grid">
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="filter">
-      <div class="filter-header appliance">
-        <input type="text" id="appliance-search" placeholder="Appareils">
-        <i class="fas fa-angle-down chev-appliance"></i>
-      </div>
-      <div class="filter-content-appliance">
-        <div id="appliance-grid">
+      <div class="filter">
+        <div class="filter-header appliance">
+          <input type="text" id="appliance-search" placeholder="Appareils">
+          <i class="fas fa-angle-down chev-appliance"></i>
+        </div>
+        <div class="filter-content-appliance">
+          <div id="appliance-grid">
+          </div>
         </div>
       </div>
-    </div>
 
-    <div class="filter">
-      <div class="filter-header ustensiles">
-        <input type="text" id="ustensiles-search" placeholder="Ustensiles">
-        <i class="fas fa-angle-down chev-ustensiles"></i>
-      </div>
-      <div class="filter-content-ustensils">
-        <div id="ustensils-grid">
+      <div class="filter">
+        <div class="filter-header ustensiles">
+          <input type="text" id="ustensiles-search" placeholder="Ustensiles">
+          <i class="fas fa-angle-down chev-ustensiles"></i>
+        </div>
+        <div class="filter-content-ustensils">
+          <div id="ustensils-grid">
+          </div>
         </div>
       </div>
     </div>
-  </div>   
 
     <section class="d-flex" id="recipes__cards">
 
     </section>
-  
+    <section class="no-result">
+
+    </section>
+
 </body>
 <script type="module" src="data/recipes.js"></script>
 <script src="/js/recipes_cards.js"></script>
